@@ -1,0 +1,96 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#inputForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    max-width: 400px;
+    width: 100%;
+}
+
+    #inputForm input[type="text"],
+    #inputForm input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #cccccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    #inputForm input[type="button"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        #inputForm input[type="button"]:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        #inputForm input[type="button"]:hover:not(:disabled) {
+            background-color: #0056b3;
+        }
+
+#chatroom {
+    max-width: 400px;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    height: 400px;
+    overflow-y: auto;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.message {
+    background-color: #dcf8c6;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+    align-self: flex-start;
+}
+
+    .message span {
+        display: block;
+        font-size: 14px;
+        color: #555;
+    }
+
+    .message .timestamp {
+        font-size: 12px;
+        color: #999;
+        text-align: right;
+        margin-top: 5px;
+    }
+
+    .message.received {
+        background-color: #f1f0f0;
+        align-self: flex-end;
+    }

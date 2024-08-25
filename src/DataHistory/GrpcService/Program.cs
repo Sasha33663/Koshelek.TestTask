@@ -14,15 +14,15 @@ internal class Program
         builder.Services.AddGrpcClient<HistoryService.HistoryServiceClient>(options=>options.Address=new Uri(b));
         builder.Services.AddGraphQLServer()
            .AddQueryType<DataHistoryController>();
-        //builder.Services.AddCors(x =>
-        //{
-        //    x.AddDefaultPolicy(x =>
-        //    {
-        //        x.AllowAnyMethod();
-        //        x.AllowAnyOrigin();
-        //        x.AllowAnyHeader();
-        //    });
-        //});
+        builder.Services.AddCors(x =>
+        {
+            x.AddDefaultPolicy(x =>
+            {
+                x.AllowAnyMethod();
+                x.AllowAnyOrigin();
+                x.AllowAnyHeader();
+            });
+        });
         var app = builder.Build();
        
         app.MapGraphQL();

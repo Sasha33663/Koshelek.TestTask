@@ -12,7 +12,7 @@ public class CreateMessage : ICreateMessage
         _httpClient = httpClient;
     }
 
-    public async Task<long> GetDaterAsync(string text, int number)
+    public async Task GetDateAsync(string text, int number)
     {
         var requestMessage = $"https://localhost:7091/api/receiver/create_message";
         var query = new Dictionary<string, string>
@@ -28,7 +28,5 @@ public class CreateMessage : ICreateMessage
         };
         var responseMessage = await _httpClient.SendAsync(content);
         responseMessage.EnsureSuccessStatusCode();
-        var message = await responseMessage.Content.ReadFromJsonAsync<Message>();
-        return message.Date;
     }
 }

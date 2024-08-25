@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR.Client;
+﻿using Domain;
+using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,14 +23,12 @@ public class WebSocketConnection
         });
     }
 
-    public async Task StartAsync()
+   
+
+    public async Task SendMessageAsync(Message message)
     {
         await _connection.StartAsync();
-        Console.WriteLine("Connection started");
-    }
 
-    public async Task SendMessageAsync(string message)
-    {
-        await _connection.InvokeAsync("SendText", message);
+        await _connection.InvokeAsync("SendMessage", message);
     }
 }

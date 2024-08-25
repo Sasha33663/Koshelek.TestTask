@@ -2,6 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8" />
+    <link rel="stylesheet" href="StyleSheet.css">
+
 </head>
 <body>
     <div id="inputForm">
@@ -27,18 +29,24 @@
                 number: parseInt(number) 
             };
 
-            hubConnection.invoke("SendText", message)
+            hubConnection.invoke("SendMessage", message)
                 .catch(function (err) {
                     return console.error(err.toString());
                 });
         });
 
-        hubConnection.on("Receive", function (text, number,date) {
-            let messageElement = document.createElement("p");
-            messageElement.textContent = `Text: ${text}, Number: ${number},TimeShtamp: ${date}`;
+        hubConnection.on("Receive", function (text, number, date) {
+            let messageElement = document.createElement("div");
+            messageElement.classList.add("message", "received");
+
+            messageElement.innerHTML = `
+        <span><strong></strong> ${text}</span>
+        <span><strong>№</strong> ${number}</span>
+        <span class="timestamp">${date}</span>
+    `;
+
             document.getElementById("chatroom").appendChild(messageElement);
         });
-
         hubConnection.start()
             .then(function () {
                 document.getElementById("sendBtn").disabled = false;

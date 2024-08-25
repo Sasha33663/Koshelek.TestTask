@@ -4,8 +4,8 @@ using Web.HttpClients;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSignalR();     
-//builder.Services.AddHttpClient<ICreateMessage,CreateMessage>();
+builder.Services.AddSignalR();
+builder.Services.AddHttpClient<ICreateMessage, CreateMessage>();
 var app = builder.Build();
 
 app.UseDefaultFiles();
