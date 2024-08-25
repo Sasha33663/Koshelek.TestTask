@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "src\DataHistory\D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "src\DataHistory\Application\Application.csproj", "{4A72F614-1A4A-4395-86F8-4294DCB193B6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcService", "src\DataHistory\GrpcService\GrpcService.csproj", "{17CCC184-27D8-44F7-BC31-779860C84ABB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "src\DataHistory\GrpcService\Web.csproj", "{17CCC184-27D8-44F7-BC31-779860C84ABB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{A7AA86AC-47BB-4119-B4FB-0AFB2EA7A844}"
 EndProject
@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protos", "src\Shared\Protos
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Streamer", "Streamer", "{F1A01F8C-F341-4460-89CC-19ED26965822}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "src\Streamer\Web\Web.csproj", "{EAC5E062-6B5C-45E6-8309-AB39A58CEB32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web", "src\Streamer\Web\Web.csproj", "{EAC5E062-6B5C-45E6-8309-AB39A58CEB32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

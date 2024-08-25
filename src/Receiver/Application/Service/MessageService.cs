@@ -34,8 +34,8 @@ public class MessageService : IMessageService
         await _validate.TextValidateAsync(text);
 
         var message = new Message(number, text, DateTimeOffset.Now.ToUnixTimeSeconds());
-        await _myClient.SendMessageAsync(message);
         await _messageRepository.CreateMessageAsync(message);
+        await _myClient.SendMessageAsync(message);
         return message;
     }
 
