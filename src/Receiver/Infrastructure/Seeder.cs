@@ -15,21 +15,21 @@ public static class Seeder
     {
         using (var connection = dbContext.CreateConnection())
         {
-            var createTableSql = @"CREATE TABLE IF NOT EXISTS ASD
+            var createTableSql = @"CREATE TABLE IF NOT EXISTS messages
                                     (
-                                        Id SERIAL PRIMARY KEY,
-                                        Column1 VARCHAR(50),
-                                        Column2 INT
+                                        number INT,
+                                        text TEXT,
+                                        date BIGINT 
                                     );";
             var result = connection.Execute(createTableSql);
 
         }
         using (var connection = dbContext.CreateConnection())
         {
-            var createTableSql = @"INSERT INTO messages (text, number)
-                                    SELECT 'Тес213ные', 222222
+            var createTableSql = @"INSERT INTO messages (text, number,date)
+                                    SELECT 'Тестовые данные', 111111,1724417106
                                     WHERE NOT EXISTS (
-                                    SELECT 1 
+                                    SELECT 
                                     FROM messages 
                                     WHERE text = 'Тестовые данные' AND number = 111111
                                     );";

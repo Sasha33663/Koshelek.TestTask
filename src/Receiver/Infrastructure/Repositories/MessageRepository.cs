@@ -34,9 +34,22 @@ public class MessageRepository : IMessageRepository
         using (var connection = _dbContext.CreateConnection())
         {
             
-            var query = @"INSERT INTO messages (text,number)
-                         VALUES (@Text,@Number);";
-            await connection.ExecuteScalarAsync<int>(query, new { Text=message.Text, Number = message.Number });
+            var query = @"INSERT INTO messages (text,number,date)
+                         VALUES (@Text,@Number,@Date);";
+            await connection.ExecuteScalarAsync<int>(query, new { Text=message.Text, Number = message.Number ,Date =message.Date});
+        }
+    }
+
+    public async Task<List<Message>> GetMessagesAsync(long time, long lastTenMin)
+    {
+        using (var connection = _dbContext.CreateConnection())
+        {
+
+            var query = @"SELECT * FROM messages  
+                      WHERE date <= @Date AND date >= @LastTenMin";
+            var a = (await connection.QueryAsync<Message>(query, new { Date = time, LastTenMin = lastTenMin })).ToList();
+            return a;
+
         }
     }
 }

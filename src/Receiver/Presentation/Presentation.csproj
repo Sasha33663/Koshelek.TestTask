@@ -9,6 +9,10 @@
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 	<ItemGroup>
+	  <PackageReference Include="Grpc.Core.Api" Version="2.65.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Shared\Protos\Protos.csproj" />
 	  <ProjectReference Include="..\Application\Application.csproj" />
 	</ItemGroup>
 </Project>

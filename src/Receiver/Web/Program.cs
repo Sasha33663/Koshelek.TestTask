@@ -1,6 +1,8 @@
 using Application.Service;
+using GrpcService;
 using Infrastructure;
 using Infrastructure.Repositories;
+using Presentation.Grpc;
 internal class Program
 {
     private static void Main(string[] args)
@@ -17,7 +19,7 @@ internal class Program
         builder.Services.AddTransient<IMessageService, MessageService>();
         builder.Services.AddTransient<IMessageRepository, MessageRepository>();
         builder.Services.AddTransient< MessageValidation>();
-
+        builder.Services.AddGrpc();
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -31,6 +33,7 @@ internal class Program
 
         app.UseAuthorization();
 
+        app.MapGrpcService<DataHistoryServiceImpl>();
         app.MapControllers();
         var dbContext = app.Services.GetRequiredService<DbContext>();
         Seeder.Start(dbContext);
