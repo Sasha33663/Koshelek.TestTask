@@ -18,15 +18,11 @@ public class ChatHub : Hub
     
     public async Task SendMessage(Message message)
     {
-       if (message.Date == 0 || message.Date == null)
-       {
-            await _message.GetDateAsync(message.Text, message.Number);
-       }
-       else
-       {
-           await Clients.All.SendAsync("Receive", message.Text, message.Number, message.Date);
-
-       }
+         await _message.GetDateAsync(message.Text, message.Number);
+    }
+    public async Task ViewMessage(Message message)
+    {
+       await Clients.All.SendAsync("Receive", message.Text, message.Number, message.Date);
     }
 
 }

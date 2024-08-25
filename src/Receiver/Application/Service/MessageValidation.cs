@@ -6,7 +6,7 @@ public class MessageValidation
 {
     public async Task NumberValidateAsync(int count)
     {
-        if (count > 1)
+        if (count > 0)
         {
             throw new NumberException();
         }

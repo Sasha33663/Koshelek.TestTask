@@ -8,7 +8,11 @@
     align-items: center;
     height: 100vh;
 }
-
+input[type="number"]::placeholder {
+    color: red; 
+    font-size: 12px;
+    font-style: italic; 
+}
 #inputForm {
     display: flex;
     flex-direction: column;

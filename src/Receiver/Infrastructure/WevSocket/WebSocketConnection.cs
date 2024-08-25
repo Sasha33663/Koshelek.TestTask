@@ -29,6 +29,6 @@ public class WebSocketConnection
     {
         await _connection.StartAsync();
 
-        await _connection.InvokeAsync("SendMessage", message);
+        await _connection.InvokeAsync("ViewMessage", message);
     }
 }
