@@ -2,6 +2,7 @@ using Application.Service;
 using GrpcService;
 using Infrastructure;
 using Infrastructure.Repositories;
+using Infrastructure.WevSocket;
 using Presentation.Grpc;
 internal class Program
 {
@@ -10,7 +11,8 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-
+        builder.Services.AddSignalR();
+        builder.Services.AddTransient<WebSocketConnection>();
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();

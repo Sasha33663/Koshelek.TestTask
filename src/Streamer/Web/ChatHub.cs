@@ -9,18 +9,18 @@ namespace Web;
 
 public class ChatHub : Hub
 {
-    private readonly ICreateMessage _message;
+    //private readonly ICreateMessage _message;
 
-    public ChatHub(ICreateMessage message)
-    {
-        _message = message;
-    }
+    //public ChatHub(ICreateMessage message)
+    //{
+    //    _message = message;
+    //}
 
-    public async Task SendText(Message message)
+    public async Task SendText(string message)
     {
-        var date = await _message.GetDaterAsync(message.Text, message.Number);
-        //var date = 64598372456;
-        await Clients.All.SendAsync("Receive", message.Text, message.Number, date);
+        //var date = await _message.GetDaterAsync(message.Text, message.Number);
+        ////var date = 64598372456;
+        //await Clients.All.SendAsync("Receive", message.Text, message.Number, date);
     }
    
 }

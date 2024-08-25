@@ -1,6 +1,9 @@
 ﻿using Application.Exeptions;
 using Domain;
 using Infrastructure.Repositories;
+using Infrastructure.WevSocket;
+
+//using Infrastructure.WevSocket;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 using System;
@@ -15,19 +18,23 @@ public class MessageService : IMessageService
 {
     private readonly IMessageRepository _messageRepository;
     private readonly MessageValidation _validate;
-    public MessageService(IMessageRepository messageRepository, MessageValidation validate)
+    private readonly WebSocketConnection _myClient;
+    public MessageService(IMessageRepository messageRepository, MessageValidation validate, WebSocketConnection myClient )
     {
         _messageRepository = messageRepository;
         _validate = validate;
+        _myClient = myClient;
     }
 
     public async Task <Message> CreateMessageAsync(int number, string text, CancellationToken token)
     {
+        
         var numberValidate = await _messageRepository.CheckNumberAsync(number);
         await _validate.NumberValidateAsync(numberValidate);
         await _validate.TextValidateAsync(text);
 
         var message = new Message(number, text, DateTimeOffset.Now.ToUnixTimeSeconds());
+        await _myClient.SendMessageAsync("ASDSSADDASSADDSA");
         await _messageRepository.CreateMessageAsync(message);
         return message;
     }
