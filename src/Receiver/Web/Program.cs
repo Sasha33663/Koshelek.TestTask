@@ -4,23 +4,35 @@ using Infrastructure;
 using Infrastructure.Repositories;
 using Infrastructure.WevSocket;
 using Presentation.Grpc;
+using Serilog;
+using Serilog.Events;
 internal class Program
 {
     private static void Main(string[] args)
     {
+        Log.Logger = new LoggerConfiguration()
+            .Enrich.FromLogContext()
+           .MinimumLevel.Information()
+           .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+           .Enrich.FromLogContext()
+           .WriteTo.Console()
+           .WriteTo.File("receiver.log")  
+           .CreateLogger();
+
         var builder = WebApplication.CreateBuilder(args);
-        //builder.Services.AddCors(options =>
-        //{
-        //    options.AddPolicy("AllowSpecificOrigin",
-        //        builder => builder
-        //            .AllowAnyOrigin() // –азрешаем запросы только с этого домена
-        //            .AllowAnyHeader()
-        //            .AllowAnyMethod());
-        //});
+        builder.Services.AddSerilog();
         builder.Services.AddSignalR();
         builder.Services.AddTransient<WebSocketConnection>();
         builder.Services.AddControllers();
-
+        builder.Services.AddCors(x =>
+        {
+            x.AddDefaultPolicy(x =>
+            {
+                x.AllowAnyMethod();
+                x.AllowAnyOrigin();
+                x.AllowAnyHeader();
+            });
+        });
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddSingleton<DbContext>();

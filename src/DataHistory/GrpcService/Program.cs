@@ -17,10 +17,8 @@ internal class Program
             });
         });
 
-        var a = builder.Configuration.GetConnectionString("Receiver");
-        var b = builder.Configuration["ConnectionString:Receiver"];
         builder.Services.AddGrpc();
-        builder.Services.AddGrpcClient<HistoryService.HistoryServiceClient>(options=>options.Address=new Uri(b));
+        builder.Services.AddGrpcClient<HistoryService.HistoryServiceClient>(options => options.Address = new Uri(builder.Configuration["ConnectionString:Receiver"]));
         builder.Services.AddGraphQLServer()
            .AddQueryType<DataHistoryController>();
         

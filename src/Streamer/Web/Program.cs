@@ -1,30 +1,43 @@
 
-using Web;
-using Web.HttpClients;
+using Serilog;
+using Serilog.Events;
+using Web.WebSocket;
 
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddSignalR();
-//builder.Services.AddHttpClient<ICreateMessage, CreateMessage>();
-builder.Services.AddCors(x =>
+internal class Program
 {
-    x.AddDefaultPolicy(x =>
+    private static void Main(string[] args)
     {
-        x.AllowAnyMethod();
-        x.AllowAnyOrigin();
-        x.AllowAnyHeader();
-    });
-});
-var app = builder.Build();
-app.UseCors(builder =>
-         builder
-        .AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader());
-app.UseDefaultFiles();
-app.UseStaticFiles();
-app.UseRouting();
+        var builder = WebApplication.CreateBuilder(args);
+        Log.Logger = new LoggerConfiguration()
+                   .Enrich.FromLogContext()
+                  .MinimumLevel.Information()
+                  .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                  .Enrich.FromLogContext()
+                  .WriteTo.Console()
+                  .WriteTo.File("streamer.log")
+                  .CreateLogger();
+        builder.Services.AddSignalR();
+        builder.Services.AddCors(x =>
+        {
+            x.AddDefaultPolicy(x =>
+            {
+                x.AllowAnyMethod();
+                x.AllowAnyOrigin();
+                x.AllowAnyHeader();
+            });
+        });
+        var app = builder.Build();
+        app.UseCors(builder =>
+                 builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+        app.UseDefaultFiles();
+        app.UseStaticFiles();
+        app.UseRouting();
 
-app.MapHub<ChatHub>("/chat");   
+        app.MapHub<ChatHub>("/chat");
 
-app.Run(); 
+        app.Run();
+    }
+}
