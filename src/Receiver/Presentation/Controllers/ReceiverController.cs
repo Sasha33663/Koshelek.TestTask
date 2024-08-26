@@ -19,7 +19,7 @@ public class ReceiverController : Controller
     }
 
     [HttpPost("create_message")]
-    public async Task <Message> CreateMessageAsync([FromQuery]CreateMessageDto dto, CancellationToken token)
+    public async Task <Message> CreateMessageAsync([FromForm]CreateMessageDto dto, CancellationToken token)
     {
       return  await _messageService.CreateMessageAsync(dto.Number,dto.Text, token);
     }
