@@ -3,9 +3,12 @@ using GrpcService;
 using Infrastructure;
 using Infrastructure.Repositories;
 using Infrastructure.WevSocket;
+using Microsoft.Extensions.DependencyInjection;
 using Presentation.Grpc;
 using Serilog;
+using Serilog.Core;
 using Serilog.Events;
+using System.Reflection;
 internal class Program
 {
     private static void Main(string[] args)
@@ -13,16 +16,27 @@ internal class Program
         Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
            .MinimumLevel.Information()
-           .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
            .Enrich.FromLogContext()
            .WriteTo.Console()
            .WriteTo.File("receiver.log")  
            .CreateLogger();
 
         var builder = WebApplication.CreateBuilder(args);
+        builder.WebHost.ConfigureKestrel(options =>
+        {
+            options.ListenAnyIP(8080, listenOptions =>
+            {
+                listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1AndHttp2;
+            });
+
+            options.ListenAnyIP(8081, listenOptions =>
+            {
+                listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2;
+            });
+        });
+
         builder.Services.AddSerilog();
         builder.Services.AddSignalR();
-        builder.Services.AddTransient<WebSocketConnection>();
         builder.Services.AddControllers();
         builder.Services.AddCors(x =>
         {
@@ -40,13 +54,21 @@ internal class Program
         builder.Services.AddTransient<IMessageRepository, MessageRepository>();
         builder.Services.AddTransient< MessageValidation>();
         builder.Services.AddGrpc();
-        var app = builder.Build();
-
-        if (app.Environment.IsDevelopment())
+        builder.Services.AddTransient<WebSocketConnection>(x =>
         {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+            var logger = x.GetRequiredService<ILogger<WebSocketConnection>>();
+            var address = builder.Configuration.GetValue<string>("WebSocketConnectionString");
+            return new WebSocketConnection(logger, address);
+        });
+        var app = builder.Build();
+       
+         app.UseSwagger();
+         app.UseSwaggerUI(c =>
+         {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Receiver");
+            c.RoutePrefix = string.Empty;
+         });
+
         app.UseCors(builder =>
          builder
         .AllowAnyOrigin()

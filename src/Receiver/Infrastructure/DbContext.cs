@@ -16,9 +16,8 @@ public class DbContext
 
     public DbContext(IConfiguration configuration)
     {
-        _connectionString = configuration.GetConnectionString("Database")!;
+        _connectionString = configuration.GetConnectionString("Database");
     }
-
     public IDbConnection CreateConnection()
     {
         return new NpgsqlConnection(_connectionString);

@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="StyleSheet.css">
+    <title>Кошелек</title>
+</head>
+<body>
+    <div id="mainContainer">
+        <form id="inputForm" action="http://localhost:7091/api/receiver/create_message" method="post" target="hiddenFrame">
+            <input type="text" name="Text" placeholder="Введите сообщение" />
+            <input type="number" name="Number" placeholder="Уникальный номер" />
+            <input type="submit" id="sendBtn" value="Отправить" />
+        </form>
+        <div id="contentContainer">
+            <div id="chatroom"></div>
+            <div id="chatroomHistory"></div>
+        </div>
+        <button id="historyBtn">Показать историю</button>
+    </div>
+
+    <iframe name="hiddenFrame" style="display:none;"></iframe>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+    <script>
+
+        const connectionUrl = ("ws://localhost:7103/chat")
+
+        function wrappedWebSocket(_url, protocols, options) {
+            return new WebSocket(connectionUrl, protocols, options);
+        }
+
+        wrappedWebSocket.CLOSED = WebSocket.CLOSED;
+        wrappedWebSocket.CLOSING = WebSocket.CLOSING;
+        wrappedWebSocket.CONNECTING = WebSocket.CONNECTING;
+        wrappedWebSocket.OPEN = WebSocket.OPEN;
+
+        const connectionOptions = {
+            skipNegotiation: true,
+            transport: signalR.HttpTransportType.WebSockets
+        };
+
+        (connectionOptions).WebSocket = wrappedWebSocket;
+
+        const hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl('http://localhost/this-url-is-not-used', connectionOptions)
+            .build();
+
+        hubConnection.invoke("ViewMessage")
+        hubConnection.start()
+            .catch(function (err) {
+                return console.error(err.toString());
+            });
+
+
+        hubConnection.on("Receive", function (text, number, date) {
+            let messageElement = document.createElement("div");
+            messageElement.classList.add("message", "received");
+
+            messageElement.innerHTML = `
+                                <span><strong></strong> ${text}</span>
+                                <span><strong>№</strong> ${number}</span>
+                                <span class="timestamp">${date}</span>`;
+
+            document.getElementById("chatroom").appendChild(messageElement);
+        });
+        document.getElementById("historyBtn").addEventListener("click", function () {
+            fetch('http://localhost:7094/graphql', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    query: `
+                            query {
+                                history {
+                                    date
+                                    number
+                                    text
+                                }
+                            }
+                            `
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    displayData(data);
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                });
+        });
+
+        function displayData(data) {
+            const history = data.data.history;
+            const container = document.getElementById('chatroomHistory');
+
+            container.innerHTML = '';
+
+            history.forEach(item => {
+                const date = item.date
+                const number = item.number;
+                const text = item.text;
+
+                const entry = document.createElement('div');
+                entry.className = 'history-entry';
+                entry.innerHTML = `<strong></strong> ${text}<br>
+                                           <strong>№</strong> ${number}<br>
+                                           <strong></strong> ${date}<br><br>`;
+
+                container.appendChild(entry);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -15,14 +15,14 @@ public static class Seeder
     {
         using (var connection = dbContext.CreateConnection())
         {
+            connection.Open();
             var createTableSql = @"CREATE TABLE IF NOT EXISTS messages
-                                    (
-                                        number INT,
-                                        text TEXT,
-                                        date BIGINT 
-                                    );";
+                                (
+                                    number INT,
+                                    text TEXT,
+                                    date BIGINT 
+                                );";
             var result = connection.Execute(createTableSql);
-
         }
         using (var connection = dbContext.CreateConnection())
         {

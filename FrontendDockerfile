@@ -1,0 +1,6 @@
+FROM nginx:alpine
+
+COPY src/Frontend/index.html /usr/share/nginx/html/index.html
+COPY src/Frontend/StyleSheet.css /usr/share/nginx/html/StyleSheet.css
+
+EXPOSE 80 

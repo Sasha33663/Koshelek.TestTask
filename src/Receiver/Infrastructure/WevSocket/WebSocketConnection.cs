@@ -12,17 +12,21 @@ public class WebSocketConnection
 {
     private readonly HubConnection _connection;
     private readonly ILogger<WebSocketConnection> _logger;
-    public WebSocketConnection(ILogger<WebSocketConnection> logger)
+    private readonly string _address;
+    public WebSocketConnection(ILogger<WebSocketConnection> logger, string address)
     {
+        _logger = logger;
+        _address = address;
+
         _connection = new HubConnectionBuilder()
-            .WithUrl("ws://localhost:5293/chat")
+            .WithUrl(_address+"/chat")
             .Build();
 
         _connection.On<string>("ReceiveMessage", (message) =>
         {
             Console.WriteLine($"Message received: {message}");
         });
-        _logger = logger;
+       
     }
 
 
