@@ -22,6 +22,7 @@ public class MessageValidation
             throw new NumberException();
         }
     }
+
     public async Task TextValidateAsync(string text)
     {
         _logger.LogDebug("Валидация текста: длина {Length}.", text.Length);

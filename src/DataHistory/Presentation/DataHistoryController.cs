@@ -1,18 +1,20 @@
 ﻿using GrpcService;
-using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using Message = Domain.Message;
 
 namespace Presentation;
+
 public class DataHistoryController
 {
     private readonly HistoryService.HistoryServiceClient _historyServiceClient;
     private readonly ILogger<DataHistoryController> _logger;
+
     public DataHistoryController(HistoryService.HistoryServiceClient historyServiceClient, ILogger<DataHistoryController> logger)
     {
         _historyServiceClient = historyServiceClient;
         _logger = logger;
     }
+
     public async Task<List<Message>> GetHistoryAsync()
     {
         try
@@ -31,8 +33,5 @@ public class DataHistoryController
             _logger.LogError(ex, "Ошибка при запросе истории сообщений через gRPC.");
             throw;
         }
-
     }
-    
 }
-

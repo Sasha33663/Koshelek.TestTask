@@ -1,21 +1,15 @@
 ﻿using Dapper;
 using Domain;
 using Microsoft.Extensions.Logging;
-using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Infrastructure.Repositories;
+
 public class MessageRepository : IMessageRepository
 {
     private readonly DbContext _dbContext;
     private readonly ILogger<MessageRepository> _logger;
-    public MessageRepository(DbContext dbContext, ILogger<MessageRepository> logger )
+
+    public MessageRepository(DbContext dbContext, ILogger<MessageRepository> logger)
     {
         _dbContext = dbContext;
         _logger = logger;
@@ -27,7 +21,7 @@ public class MessageRepository : IMessageRepository
 
         using (var connection = _dbContext.CreateConnection())
         {
-            var query = @"SELECT COUNT(*) FROM messages 
+            var query = @"SELECT COUNT(*) FROM messages
                      WHERE number = @Number;";
             var count = await connection.ExecuteScalarAsync<int>(query, new { Number = number });
 
@@ -36,6 +30,7 @@ public class MessageRepository : IMessageRepository
             return count;
         }
     }
+
     public async Task CreateMessageAsync(Message message)
     {
         _logger.LogInformation("Создание нового сообщения с номером {Number} в базе данных.", message.Number);
@@ -56,7 +51,7 @@ public class MessageRepository : IMessageRepository
 
         using (var connection = _dbContext.CreateConnection())
         {
-            var query = @"SELECT * FROM messages  
+            var query = @"SELECT * FROM messages
                       WHERE date <= @Date AND date >= @LastTenMin";
             var messages = (await connection.QueryAsync<Message>(query, new { Date = time, LastTenMin = lastTenMin })).ToList();
 

@@ -1,8 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using System.Net.Http;
-using System.Net;
-using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Web.WebSocket;
 
@@ -31,5 +27,4 @@ public class ChatHub : Hub
             throw;
         }
     }
-
 }

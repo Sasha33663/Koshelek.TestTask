@@ -5,10 +5,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Presentation.Grpc;
 
-public class DataHistoryServiceImpl :HistoryService.HistoryServiceBase
+public class DataHistoryServiceImpl : HistoryService.HistoryServiceBase
 {
     private readonly IMessageService _messageService;
     private readonly ILogger<DataHistoryServiceImpl> _logger;
+
     public DataHistoryServiceImpl(IMessageService messageService, ILogger<DataHistoryServiceImpl> logger)
     {
         _messageService = messageService;

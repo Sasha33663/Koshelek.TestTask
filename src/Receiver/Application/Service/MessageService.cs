@@ -1,27 +1,18 @@
-﻿using Application.Exeptions;
-using Domain;
-using GrpcService;
+﻿using GrpcService;
 using Infrastructure.Repositories;
 using Infrastructure.WevSocket;
-
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Service;
+
 public class MessageService : IMessageService
 {
     private readonly IMessageRepository _messageRepository;
     private readonly MessageValidation _validate;
     private readonly WebSocketConnection _myClient;
-    private readonly ILogger <MessageService> _logger;
-    public MessageService(IMessageRepository messageRepository, MessageValidation validate, WebSocketConnection myClient, ILogger<MessageService> logger )
+    private readonly ILogger<MessageService> _logger;
+
+    public MessageService(IMessageRepository messageRepository, MessageValidation validate, WebSocketConnection myClient, ILogger<MessageService> logger)
     {
         _messageRepository = messageRepository;
         _validate = validate;
@@ -29,7 +20,7 @@ public class MessageService : IMessageService
         _logger = logger;
     }
 
-    public async Task <Domain.Message> CreateMessageAsync(int number, string text, CancellationToken token)
+    public async Task<Domain.Message> CreateMessageAsync(int number, string text, CancellationToken token)
     {
         _logger.LogInformation("Начало создания сообщения с номером {Number} и текстом {Text}.", number, text);
 
@@ -94,4 +85,3 @@ public class MessageService : IMessageService
         }
     }
 }
- 

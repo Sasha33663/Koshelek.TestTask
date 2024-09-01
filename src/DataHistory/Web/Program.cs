@@ -1,17 +1,14 @@
 using GrpcService;
-using Microsoft.VisualBasic;
 using Presentation;
-using Serilog.Events;
 using Serilog;
-using System.Net;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Serilog.Events;
 
 internal class Program
 {
     private static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        
+
         Log.Logger = new LoggerConfiguration()
            .Enrich.FromLogContext()
           .MinimumLevel.Information()
@@ -34,7 +31,7 @@ internal class Program
         builder.Services.AddGrpcClient<HistoryService.HistoryServiceClient>(options => options.Address = new Uri(builder.Configuration["ConnectionString:Receiver"]));
         builder.Services.AddGraphQLServer()
            .AddQueryType<DataHistoryController>();
-        
+
         var app = builder.Build();
         app.UseCors(builder =>
           builder
